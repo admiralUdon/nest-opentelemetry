@@ -25,13 +25,10 @@ export class ServiceA {
             const query: Prisma.Sql = Prisma.sql`SELECT NOW()`;
 
             // Logging
-            this._logService.debug("ServiceA.postgresql.getTimestamp REQ", "abs");
+            this._logService.debug("ServiceA.postgresql.getTimestamp REQ", query);
 
             // Database operation
-            const [timestamp] = await this._prismaService.$queryRaw(query) as any;    
-            
-            console.log("timestamp", timestamp);
-            
+            const [timestamp] = await this._prismaService.$queryRaw(query) as any;
 
             // Logging
             this._logService.debug("ServiceA.postgresql.getTimestamp RESP", timestamp);
