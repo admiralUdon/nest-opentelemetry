@@ -25,7 +25,7 @@ import { OTLPExporterNodeConfigBase } from '@opentelemetry/otlp-exporter-base';
 // Configure the SDK to export telemetry data to the console
 // Enable all auto-instrumentations from the meta package
 const exporterOptions: OTLPExporterNodeConfigBase = {
-    url: 'http://127.0.0.1:4318/v1/traces',
+    url: process.env.JAEGER_URL,
 };
 
 const traceExporter = new OTLPTraceExporter(exporterOptions);
@@ -33,7 +33,7 @@ const sdk = new NodeSDK({
     traceExporter,
     instrumentations: [getNodeAutoInstrumentations()],
     resource: new Resource({
-        [SemanticResourceAttributes.SERVICE_NAME]: 'sample-nestjs-app-1',
+        [SemanticResourceAttributes.SERVICE_NAME]: (process.env.APP_NAME || "default-jaeger-app"),
     }),
 });
 
