@@ -2,28 +2,30 @@
  * 
  * Please update this so that we can track the latest version.
  * 
- * Author           : Ahmad Miqdaad (ahmadmiqdad.aziz@teras.com.my)
- * Last Contributor : Ahmad Miqdaad (ahmadmiqdad.aziz@teras.com.my)
- * Last Updated     : 26 April 2024
+ * Author           : Ahmad Miqdaad (ahmadmiqdaadz[at]gmail.com)
+ * Last Contributor : Ahmad Miqdaad (ahmadmiqdaadz[at]gmail.com)
+ * Last Updated     : 1 May 2024
  * 
  * **/
 
-import { Injectable } from '@nestjs/common';
-import Redis from 'ioredis';
+import { Injectable, Logger } from '@nestjs/common';
+import { Redis, RedisOptions } from 'ioredis';
 import { redisConfig } from 'app/config/redis.config';
 
 @Injectable()
 export class RedisService {
 
-    private readonly client: Redis;
+    private client: Redis;
+    private config: RedisOptions;
     private DEFAULT_EXPIRATION = 10;
+    private readonly logger = new Logger(RedisService.name);
 
     /**
      * Constructor
      */
-
+    
     constructor() {
-        this.client = new Redis(redisConfig());
+        this.initialiseDb();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -47,6 +49,35 @@ export class RedisService {
                 this.client.setex(key, this.DEFAULT_EXPIRATION, JSON.stringify(freshData));
                 resolve(freshData);
             })
-        });
+        })
+    }
+
+    async getInfo(): Promise<{ [key: string]: string }>{
+        const info = await this.client.info();
+        const lines = info.split('\r\n');
+        const infoObject: { [key: string]: string } = {};
+        for (const line of lines) {
+            const parts = line.split(':');
+            if (parts.length === 2) {
+                const key = parts[0];
+                const value = parts[1];
+                infoObject[key] = value.trim();
+            }
+        }
+        return infoObject;
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Private methods
+    // -----------------------------------------------------------------------------------------------------
+
+    private async initialiseDb() {
+        try {
+            this.config = redisConfig();
+            this.client = new Redis(this.config);
+            this.logger.debug(`Redis Database successfully initialized`);
+        } catch (error) {
+            this.logger.error(`Failed to initialize Redis Client: ${error}`);
+        }
     }
 }
