@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { LogService } from 'app/core/services/log/log.service';
+import { LogService } from 'app/core/providers/log/log.service';
 
 @Module({
     providers: [LogService],

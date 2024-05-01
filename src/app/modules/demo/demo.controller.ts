@@ -1,7 +1,6 @@
 import { Controller, Get, HttpStatus, InternalServerErrorException, Query, Request, Response } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
-import { LogService } from 'app/core/services/log/log.service';
-import { PrismaService } from 'app/core/services/prisma/prisma.service';
+import { LogService } from 'app/core/providers/log/log.service';
 import { AppCode } from 'app/core/types/app.type';
 import { DefaultHttpException } from 'app/shared/custom/http-exception/default.http-exception';
 import { DefaultHttpResponse } from 'app/shared/custom/http-response/default.http-response';

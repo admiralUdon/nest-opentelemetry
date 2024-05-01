@@ -1,6 +1,6 @@
 import { Controller, Get, HttpStatus, Query, Request, Response } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
-import { LogService } from 'app/core/services/log/log.service';
+import { LogService } from 'app/core/providers/log/log.service';
 import { AppCode } from 'app/core/types/app.type';
 import { DefaultHttpException } from 'app/shared/custom/http-exception/default.http-exception';
 import { DefaultHttpResponse } from 'app/shared/custom/http-response/default.http-response';
@@ -8,7 +8,7 @@ import { DefaultHttpResponse } from 'app/shared/custom/http-response/default.htt
 @Controller()
 export class HelloController {
 
-    private readonly logService: LogService = new LogService(HelloController.name);
+    private readonly logProvider: LogService = new LogService(HelloController.name);
 
     @Get()
     @ApiOperation({ summary: "Display Hello", description: "A simple greeting API that returns a friendly \"Hello, World!\" message when accessed. It serves as a basic example or placeholder for API testing and demonstration purposes" })

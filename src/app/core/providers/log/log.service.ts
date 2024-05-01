@@ -14,7 +14,6 @@ import { convertSizeToBytes } from 'app/core/utils/size-conversion.util';
 import { readFileSync } from 'fs-extra';
 import { join, resolve } from 'path';
 import * as winston from 'winston';
-import { ElasticsearchTransport } from 'winston-elasticsearch';
 
 interface TransactionI {
     type            : "start" | "end";
@@ -132,26 +131,6 @@ export class LogService extends Logger {
 
     getTransports()
     {
-        // Elasticsearch
-        const certificatePath = "./src/assets/certs";
-        const certificateName = "ca.crt";
-        const certificateFilePath = join(certificatePath, certificateName);        
-
-        const elasticsearchTransport = process.env.ELASTICSEARCH_LOGGING === "true" ? new ElasticsearchTransport({
-            level: 'info',
-            indexPrefix: process.env.ELASTICSEARCH_LOG_INDEX,
-            clientOpts: {
-                node: process.env.ELASTICSEARCH_LOG_NODE,
-                tls: {
-                    rejectUnauthorized: true,
-                    ca: [readFileSync(certificateFilePath)],
-                },
-                auth: {
-                    username: process.env.ELASTICSEARCH_LOG_USER,
-                    password: process.env.ELASTICSEARCH_LOG_PASS,
-                },
-            },
-        }) : undefined;
 
         // Console
         const consoleTransport = process.env.CONSOLE_LOGGING === "true" ? new winston.transports.Console() : undefined;
@@ -166,6 +145,6 @@ export class LogService extends Logger {
         }) : undefined;
 
 
-        return [elasticsearchTransport, fileTransport, consoleTransport].filter(n => n);
+        return [fileTransport, consoleTransport].filter(n => n);
     }
 }

@@ -9,7 +9,7 @@
  * **/
 
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { LogService } from 'app/core/services/log/log.service';
+import { LogService } from 'app/core/providers/log/log.service';
 import { ISO8601WithMs } from 'app/core/utils/date.util';
 import { NextFunction, Request, Response } from 'express';
 

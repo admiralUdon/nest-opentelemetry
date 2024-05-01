@@ -1,8 +1,8 @@
 
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "app/core/services/prisma/prisma.service";
+import { PrismaService } from "app/core/providers/prisma/prisma.service";
 import { trace, SpanStatusCode } from '@opentelemetry/api';
-import { LogService } from "app/core/services/log/log.service";
+import { LogService } from "app/core/providers/log/log.service";
 import { Prisma } from "@prisma/client";
 
 @Injectable()

@@ -3,12 +3,14 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from 'app.module';
-import tracer from './app/core/sdk/open-telemetry.sdk';
+import tracer from 'app/core/sdk/open-telemetry.sdk';
+import { trace, TracerProvider  } from '@opentelemetry/api';
 
 async function bootstrap() {
 
     // Start open telemetry automatic instrumentation
     await tracer.start();
+    trace.setGlobalTracerProvider(tracer as unknown as TracerProvider);
 
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
     const SERVER_ADDRESS = process.env.SERVER_ADDRESS || "127.0.0.1";
