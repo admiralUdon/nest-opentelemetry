@@ -10,6 +10,7 @@ export class CoreService implements OnApplicationBootstrap {
     /**
      * Constructor
      */
+    
     constructor(
     ) {}
 

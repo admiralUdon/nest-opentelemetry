@@ -8,11 +8,19 @@ import { Prisma } from "@prisma/client";
 @Injectable()
 export class ServiceA {
     
+    /**
+     * Constructor
+     */
+
     constructor (
         private readonly _prismaService: PrismaService,
         private readonly _logService: LogService
     ){
     }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Public methods
+    // -----------------------------------------------------------------------------------------------------
 
     async getTimestamp(): Promise<any | null> {
 

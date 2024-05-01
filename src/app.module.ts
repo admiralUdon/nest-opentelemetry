@@ -6,6 +6,7 @@ import { appRoutes } from 'app.routes';
 import { throttlerConfig } from 'app/config/throttler.config';
 import { CoreService } from 'app/core/core.service';
 import { LogMiddleware } from 'app/core/middlewares/log.middleware';
+import { LogServiceModule } from 'app/core/providers/log/log.module';
 import { DemoModule } from 'app/modules/demo/demo.module';
 import { HelloModule } from 'app/modules/hello/hello.module';
 
@@ -14,6 +15,7 @@ import { HelloModule } from 'app/modules/hello/hello.module';
         // Config modules
         ConfigModule.forRoot({expandVariables: true}),
         ThrottlerModule.forRoot(throttlerConfig),
+        LogServiceModule,
         // Custom modules
         HelloModule,
         DemoModule,

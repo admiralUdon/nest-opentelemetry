@@ -5,11 +5,19 @@ import { trace, SpanStatusCode } from '@opentelemetry/api';
 
 @Injectable()
 export class ServiceB {
-    
+ 
+    /**
+     * Constructor
+     */
+        
     constructor (
         private readonly _redisService: RedisService
     ){
     }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Public methods
+    // -----------------------------------------------------------------------------------------------------
 
     async getCacheTimestamp(key, timestamp): Promise<any | null> {
 

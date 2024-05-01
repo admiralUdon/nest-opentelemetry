@@ -14,12 +14,21 @@ import { redisConfig } from 'app/config/redis.config';
 
 @Injectable()
 export class RedisService {
+
     private readonly client: Redis;
     private DEFAULT_EXPIRATION = 10;
+
+    /**
+     * Constructor
+     */
 
     constructor() {
         this.client = new Redis(redisConfig());
     }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Public methods
+    // -----------------------------------------------------------------------------------------------------
 
     async set(key: string, value: string): Promise<void> {
         await this.client.set(key, value);

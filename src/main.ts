@@ -2,11 +2,19 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { TracerProvider, trace } from '@opentelemetry/api';
 import { AppModule } from 'app.module';
 import tracer from 'app/core/sdk/open-telemetry.sdk';
-import { trace, TracerProvider  } from '@opentelemetry/api';
+import { existsSync } from 'fs-extra';
 
 async function bootstrap() {
+
+    // Check if .env file exists
+    if (!existsSync('.env')) {
+        const error = 'The .env file is missing. Please make sure it exists.';
+        Logger.error(error, "MainApplication");
+        throw new Error(error);
+    }
 
     // Start open telemetry automatic instrumentation
     await tracer.start();
@@ -63,4 +71,7 @@ async function bootstrap() {
         Logger.log(`NestJS app is running on http://${SERVER_ADDRESS}:${SERVER_PORT}`, "MainApplication");
     });
 }
-bootstrap();
+
+bootstrap().catch(() => {
+    process.exit(1);
+});

@@ -4,7 +4,7 @@
  * 
  * Author           : Ahmad Miqdaad (ahmadmiqdad.aziz@teras.com.my)
  * Last Contributor : Ahmad Miqdaad (ahmadmiqdad.aziz@teras.com.my)
- * Last Updated     : 26 April 2024
+ * Last Updated     : 30 April 2024
  * 
  * **/
 
@@ -16,8 +16,20 @@ import { NextFunction, Request, Response } from 'express';
 @Injectable()
 export class LogMiddleware implements NestMiddleware {
     
-    private readonly logService: LogService = new LogService(LogMiddleware.name)
-    
+    /**
+     * Constructor
+     */
+
+    constructor(
+        private _logService: LogService
+    ) {
+        this._logService.registerClassName(LogMiddleware.name);
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Middleware
+    // -----------------------------------------------------------------------------------------------------
+
     use(req: Request, res: Response, next: NextFunction) {
 
         // Get Request Start Timestamp
@@ -32,7 +44,7 @@ export class LogMiddleware implements NestMiddleware {
         const requestBody = JSON.stringify(req.body);
         
         // Start YYYY-MM-DD HH:mm:ss-APP.log
-        this.logService.transaction({
+        this._logService.transaction({
             type        : "start",
             data        : {
                 timestamp   : ISO8601WithMs(requestStartTime),
@@ -60,7 +72,7 @@ export class LogMiddleware implements NestMiddleware {
                 const responseTime = requestEndTime.getTime() - requestStartTime.getTime();
 
                 // End YYYY-MM-DD HH:mm:ss-APP.log
-                this.logService.transaction({ 
+                this._logService.transaction({ 
                     type        : "end",
                     data        : {
                         url         : req.originalUrl,
@@ -75,7 +87,7 @@ export class LogMiddleware implements NestMiddleware {
 
         // Ensure the logging has completed before moving on
         loggingPromise.catch((error) => {
-            this.logService.error(`Error during logging: ${error.message}`);
+            this._logService.error(`Error during logging: ${error.message}`);
         });
     }
 }

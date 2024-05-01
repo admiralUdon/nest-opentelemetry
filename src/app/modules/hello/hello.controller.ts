@@ -8,7 +8,18 @@ import { DefaultHttpResponse } from 'app/shared/custom/http-response/default.htt
 @Controller()
 export class HelloController {
 
-    private readonly logProvider: LogService = new LogService(HelloController.name);
+    /**
+     * Constructor
+     */
+
+    constructor(
+        private _logService: LogService
+    ){
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Public methods
+    // -----------------------------------------------------------------------------------------------------
 
     @Get()
     @ApiOperation({ summary: "Display Hello", description: "A simple greeting API that returns a friendly \"Hello, World!\" message when accessed. It serves as a basic example or placeholder for API testing and demonstration purposes" })
@@ -32,16 +43,20 @@ export class HelloController {
             });
         }
 
+        const data = {
+            message: "Hello, World!",
+            host,
+            note
+        };
+
+        this._logService.debug("Logging the data", data);
+
         const successCode = AppCode.OK;
         const result = new DefaultHttpResponse({
             code: successCode.code,
             message: successCode.description,
             statusCode: successCode.status,
-            data: {
-                message: "Hello, World!",
-                host,
-                note
-            }
+            data
         });
         
         response.status(result.statusCode);
